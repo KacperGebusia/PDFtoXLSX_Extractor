@@ -1,16 +1,23 @@
-# This is a sample Python script.
+import re
+from pdfminer.high_level import extract_pages, extract_text
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+text = extract_text('data/invoices/f-vat_2011.pdf')
+# print(text)
+
+invoice_number = re.search(r'Faktura VAT nr ([\w\s\d]+)', text).group(1).strip()
+issue_date = re.search(r'Data wystawienia:\s*(\d{4}-\d{2}-\d{2})', text).group(1).strip()
+sale_date = re.search(r'Data sprzedaży:\s*(\d{4}-\d{2}-\d{2})', text).group(1).strip()
+
+print(invoice_number)
+print(issue_date)
+print(sale_date)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import tabula
 
+tables = tabula.read_pdf('data/invoices/f-vat_2011.pdf', pages="all")
+#print(tables)
+df = tables[0]
+df = df[df.lp >= 1]
+print(df)
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
