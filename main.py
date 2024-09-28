@@ -33,5 +33,8 @@ df['Data sprzedaży'] = sale_date
 
 df.to_excel(result_path, index=False, engine='openpyxl')
 
+with pd.ExcelWriter('data/results/all.xlsx', engine='openpyxl', mode='a', if_sheet_exists='overlay') as writer:
+    df.to_excel(writer, index=False, header=False, startrow=writer.sheets['Sheet1'].max_row, sheet_name='Sheet1')
+
 print("Dane z faktury zapisano do pliku ", result_path)
 print(df)
