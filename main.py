@@ -1,5 +1,6 @@
 import re
 from pdfminer.high_level import extract_pages, extract_text
+import pandas as pd
 
 text = extract_text('data/invoices/f-vat_2011.pdf')
 # print(text)
@@ -21,3 +22,8 @@ df = tables[0]
 df = df[df.lp >= 1]
 print(df)
 
+df['Numer faktury'] = invoice_number
+df['Data wystawienia'] = issue_date
+df['Data sprzedaży'] = sale_date
+
+df.to_excel('data/results/faktura_baza_danych.xlsx', index=False, engine='openpyxl')
